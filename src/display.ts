@@ -30,9 +30,10 @@ namespace spzl {
       this.height = board.rows * this.unit;
 
       if (this.isP5Canvas(canvas)) {
-        canvas.width = this.width;
-        canvas.heigh = this.height;
-        this.canvas = canvas.elt;
+        const p5Canvas = canvas;
+        p5Canvas.width = this.width;
+        p5Canvas.heigh = this.height;
+        this.canvas = p5Canvas.elt;
       } else if (canvas instanceof HTMLCanvasElement) {
         this.canvas = canvas;
       } else {
@@ -46,7 +47,7 @@ namespace spzl {
       this.ctx = this.canvas.getContext("2d");
     }
 
-    private isP5Canvas(canvas: any) {
+    private isP5Canvas(canvas: any): boolean {
       return (
         canvas.elt !== undefined && canvas.elt.classList.contains("p5Canvas")
       );
