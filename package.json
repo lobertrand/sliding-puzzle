@@ -1,0 +1,38 @@
+{
+  "name": "sliding-puzzle",
+  "version": "1.0.0",
+  "description": "Base classes and game logic for creating a sliding puzzle. Inspired by the puzzles of 'Professor Layton' and 'Rush Hour'.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tidy": "npx prettier --write"
+  },
+  "keywords": [
+    "sliding",
+    "puzzle",
+    "blocks",
+    "layton",
+    "red",
+    "car"
+  ],
+  "author": "Loic Bertrand",
+  "license": "MIT",
+  "devDependencies": {
+    "prettier": "2.2.1",
+    "husky": "^4.3.6",
+    "lint-staged": "^10.5.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  }
+}
