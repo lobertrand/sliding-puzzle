@@ -1,4 +1,4 @@
-namespace spzl {
+namespace SlidingPuzzle {
   export class Direction {
     dx: number;
     dy: number;

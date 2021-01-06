@@ -1,4 +1,4 @@
-namespace spzl {
+namespace SlidingPuzzle {
   interface Point {
     x: number;
     y: number;
@@ -205,7 +205,7 @@ namespace spzl {
         const animatedBlock = this.selectedBlock;
 
         this.animationRunning = true;
-        spzl.Utils.runAnimation({
+        SlidingPuzzle.Utils.runAnimation({
           duration: 50,
           onFrame: (progress) => {
             animatedBlock.x = Utils.lerp(x, x + dx, progress);

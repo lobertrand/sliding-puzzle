@@ -1,4 +1,8 @@
-namespace spzl {
+namespace SlidingPuzzle {
+  export interface P5Canvas {
+    canvas: HTMLCanvasElement;
+  }
+
   export interface BlockParameters {
     shape?: number[][];
     cols?: number;
@@ -9,7 +13,7 @@ namespace spzl {
     possibleOverlaps?: Block[];
     selectable?: boolean;
     color?: string;
-    image?: string | HTMLImageElement;
+    image?: string | HTMLImageElement | P5Canvas;
     tag?: string;
   }
 
@@ -23,7 +27,6 @@ namespace spzl {
     possibleOverlaps: Block[];
     selectable: boolean;
     color: string;
-    // image: (string | HTMLImageElement);
     imageElement: HTMLImageElement;
     tag: string;
 
@@ -31,7 +34,7 @@ namespace spzl {
       shape = [[1]],
       x = 0,
       y = 0,
-      possibleMoves = Direction.none(),
+      possibleMoves = Direction.all(),
       possibleOverlaps = [],
       selectable = true,
       color = null,
@@ -50,16 +53,29 @@ namespace spzl {
       this.possibleOverlaps = possibleOverlaps;
       this.selectable = selectable;
       this.color = color;
-      // this.image = image;
-
-      if (typeof image === "string") {
-        this.imageElement = document.createElement("img");
-        this.imageElement.src = image;
-      } else if (image instanceof HTMLImageElement) {
-        this.imageElement = image;
-      }
-
       this.tag = tag;
+
+      if (image) {
+        if (typeof image === "string") {
+          this.imageElement = Block.urlToImage(image);
+        } else if (image instanceof HTMLImageElement) {
+          this.imageElement = image;
+        } else if ((image as P5Canvas).canvas) {
+          const url = image.canvas.toDataURL();
+          this.imageElement = Block.urlToImage(url);
+          this.imageElement.width = image.canvas.width;
+          this.imageElement.height = image.canvas.height;
+        }
+      }
+    }
+
+    private static urlToImage(url: string): HTMLImageElement {
+      const image = new Image();
+      image.onerror = () => {
+        throw new Error(`Error on image "${url}".`);
+      };
+      image.src = url;
+      return image;
     }
 
     *shapeCoords(): Generator<[number, number], void, void> {

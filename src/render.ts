@@ -1,59 +1,59 @@
-namespace spzl {
+namespace SlidingPuzzle {
   type P5Canvas = any;
 
-  export class CanvasDisplay {
+  export class CanvasRenderer {
     board: Board;
     ctx: CanvasRenderingContext2D;
     canvas: HTMLCanvasElement;
     unit: number;
-    width: number;
-    height: number;
 
-    constructor(
-      board: Board,
-      canvas: HTMLCanvasElement | P5Canvas,
-      maxWidth: number,
-      maxHeight: number
-    ) {
+    constructor({
+      board,
+      canvas,
+      dimension,
+    }: {
+      board: Board;
+      canvas?: P5Canvas | HTMLCanvasElement;
+      dimension?: Utils.Dimension;
+    }) {
       this.board = board;
 
-      const widthRatio = maxWidth / board.cols;
-      const heightRatio = maxHeight / board.rows;
-
-      if (widthRatio > heightRatio) {
-        this.unit = Math.floor(maxHeight / board.rows);
-      } else {
-        this.unit = Math.floor(maxWidth / board.cols);
+      if (!canvas && !dimension) {
+        throw new Error(
+          "You may pass a 'canvas' or a 'dimension' or both as parameters."
+        );
       }
 
-      this.width = board.cols * this.unit;
-      this.height = board.rows * this.unit;
-
-      if (this.isP5Canvas(canvas)) {
-        const p5Canvas = canvas;
-        p5Canvas.width = this.width;
-        p5Canvas.heigh = this.height;
-        this.canvas = p5Canvas.elt;
+      if (!canvas) {
+        this.canvas = document.createElement("canvas");
+      } else if (canvas.elt && canvas.elt.classList.contains("p5Canvas")) {
+        this.canvas = canvas.elt;
       } else if (canvas instanceof HTMLCanvasElement) {
         this.canvas = canvas;
       } else {
         throw new TypeError(
-          "canvas parameter should be an HTMLCanvasElement or a p5 canvas."
+          "'canvas' parameter should be an HTMLCanvasElement or a p5 canvas."
         );
       }
 
-      this.canvas.width = this.width;
-      this.canvas.height = this.height;
+      if (!dimension) {
+        this.canvas.width = dimension.width;
+        this.canvas.height = dimension.height;
+      }
+
+      this.unit = this.canvas.width / this.board.cols;
       this.ctx = this.canvas.getContext("2d");
     }
 
-    private isP5Canvas(canvas: any): boolean {
-      return (
-        canvas.elt !== undefined && canvas.elt.classList.contains("p5Canvas")
-      );
+    get width(): number {
+      return this.canvas.width;
     }
 
-    show() {
+    get height(): number {
+      return this.canvas.height;
+    }
+
+    render() {
       if (this.board.imageElement) {
         this.ctx.drawImage(
           this.board.imageElement,
@@ -72,11 +72,11 @@ namespace spzl {
       }
 
       for (let block of this.board.blocks) {
-        this.showBlock(block);
+        this.renderBlock(block);
       }
     }
 
-    showBlock(block: Block) {
+    renderBlock(block: Block) {
       const unit = this.unit;
 
       if (block.color !== null) {

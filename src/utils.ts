@@ -1,10 +1,23 @@
-namespace spzl.Utils {
+namespace SlidingPuzzle.Utils {
+  export interface Dimension {
+    width: number;
+    height: number;
+  }
   export function constrain(value: number, min: number, max: number): number {
     return value < min ? min : value > max ? max : value;
   }
 
   export function lerp(start: number, stop: number, amount: number): number {
     return amount * (stop - start) + start;
+  }
+
+  export function fitInBounds(board: Board, bounds: Dimension): Dimension {
+    const unit = Math.floor(
+      Math.min(bounds.width / board.cols, bounds.height / board.rows)
+    );
+    const width = board.cols * unit;
+    const height = board.rows * unit;
+    return { width, height };
   }
 
   export function runAnimation({
