@@ -8,6 +8,7 @@ namespace SlidingPuzzle {
     cols?: number;
     rows?: number;
     animate?: boolean;
+    animationDuration?: number;
     color?: string;
     image?: string | HTMLImageElement;
   }
@@ -19,6 +20,7 @@ namespace SlidingPuzzle {
     selectedBlock: Block;
     pressedPoint: Point;
     animate: boolean;
+    animationDuration?: number;
     animationRunning: boolean;
     color: string;
     imageElement: HTMLImageElement;
@@ -35,6 +37,7 @@ namespace SlidingPuzzle {
       cols = 6,
       rows = 6,
       animate = true,
+      animationDuration = 70,
       color = null,
       image = null,
     }: BoardParameters = {}) {
@@ -44,6 +47,7 @@ namespace SlidingPuzzle {
       this.selectedBlock = null;
       this.pressedPoint = null;
       this.animate = animate;
+      this.animationDuration = animationDuration;
       this.animationRunning = false;
       this.color = color;
 
@@ -206,7 +210,7 @@ namespace SlidingPuzzle {
 
         this.animationRunning = true;
         SlidingPuzzle.Utils.runAnimation({
-          duration: 50,
+          duration: this.animationDuration,
           onFrame: (progress) => {
             animatedBlock.x = Utils.lerp(x, x + dx, progress);
             animatedBlock.y = Utils.lerp(y, y + dy, progress);

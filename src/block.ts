@@ -28,6 +28,7 @@ namespace SlidingPuzzle {
     selectable: boolean;
     color: string;
     imageElement: HTMLImageElement;
+    imagePath: string;
     tag: string;
 
     constructor({
@@ -58,13 +59,16 @@ namespace SlidingPuzzle {
       if (image) {
         if (typeof image === "string") {
           this.imageElement = Block.urlToImage(image);
+          this.imagePath = image;
         } else if (image instanceof HTMLImageElement) {
           this.imageElement = image;
+          this.imagePath = this.imageElement.src;
         } else if ((image as P5Canvas).canvas) {
           const url = image.canvas.toDataURL();
           this.imageElement = Block.urlToImage(url);
           this.imageElement.width = image.canvas.width;
           this.imageElement.height = image.canvas.height;
+          this.imagePath = this.imageElement.src;
         }
       }
     }
