@@ -37,7 +37,7 @@ namespace SlidingPuzzle {
       cols = 6,
       rows = 6,
       animate = true,
-      animationDuration = 70,
+      animationDuration = 60,
       color = null,
       image = null,
     }: BoardParameters = {}) {
