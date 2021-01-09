@@ -2,15 +2,15 @@
   "name": "sliding-puzzle",
   "version": "1.0.0",
   "description": "Base classes and game logic for creating a sliding puzzle. Inspired by the puzzles of 'Professor Layton' and 'Rush Hour'.",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/sliding-puzzle.js",
+  "types": "dist/sliding-puzzle.d.ts",
   "files": [
     "/dist"
   ],
   "scripts": {
-    "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "tidy": "npx prettier --write .",
+    "build": "rollup -c",
+    "watch": "rollup -cw",
+    "format": "npx prettier --write .",
     "doc": "npx typedoc --theme minimal --readme README.md --out doc src/**"
   },
   "keywords": [
@@ -27,7 +27,10 @@
     "husky": "^4.3.6",
     "lint-staged": "^10.5.3",
     "prettier": "2.2.1",
-    "typedoc": "^0.20.11"
+    "typedoc": "^0.20.11",
+    "rollup": "^2.36.1",
+    "rollup-plugin-typescript2": "^0.29.0",
+    "typescript": "^4.1.3"
   },
   "husky": {
     "hooks": {
@@ -36,9 +39,6 @@
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
-  },
-  "dependencies": {
-    "typescript": "^4.1.3"
   },
   "repository": {
     "type": "git",

@@ -2,13 +2,13 @@
   "compilerOptions": {
     // Build settings
     "declaration": true,
-    "target": "es6",
-    "outFile": "./dist/sliding-puzzle.js",
+    "target": "es5",
+    "outDir": "dist",
     // Language settings
     "moduleResolution": "node",
     "noImplicitAny": true,
     "downlevelIteration": true,
-    "lib": ["es2017", "es7", "es6", "dom"]
+    "lib": ["es7", "es6", "dom"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
