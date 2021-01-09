@@ -31,9 +31,11 @@ namespace SlidingPuzzle {
       this.parentElement = parentElement;
 
       // Background
-      this.backgroundDiv = document.createElement("div");
-      this.parentElement.style.display = "grid";
+      this.backgroundDiv =
+        this.parentElement.querySelector("div.background") ||
+        document.createElement("div");
       this.parentElement.appendChild(this.backgroundDiv);
+      this.parentElement.style.display = "grid";
 
       const resize = () => {
         const bounds = this.parentElement.getBoundingClientRect();
@@ -55,7 +57,7 @@ namespace SlidingPuzzle {
 
       this.backgroundDiv.style.position = "relative";
       this.backgroundDiv.style.margin = "auto";
-      this.backgroundDiv.id = "background";
+      this.backgroundDiv.classList.add("background");
 
       if (board.color) {
         this.backgroundDiv.style.backgroundColor = board.color;
@@ -65,11 +67,13 @@ namespace SlidingPuzzle {
       }
 
       // Puzzle
-      this.boardDiv = document.createElement("div");
+      this.boardDiv =
+        this.backgroundDiv.querySelector("div.board") ||
+        document.createElement("div");
+      this.backgroundDiv.appendChild(this.boardDiv);
       this.boardDiv.style.position = "absolute";
       this._applyProportions(this.boardDiv, proportions);
-      this.boardDiv.id = "board";
-      this.backgroundDiv.appendChild(this.boardDiv);
+      this.boardDiv.classList.add("board");
 
       // Blocks
       this.blockDivs = new Map(); // Map<Block, Element>
@@ -78,6 +82,9 @@ namespace SlidingPuzzle {
         const div = document.createElement("div");
         this.blockDivs.set(block, div);
         div.classList.add("block");
+        if (block.selectable) {
+          div.classList.add("selectable");
+        }
         div.style.position = "absolute";
 
         this._applyProportions(div, {
@@ -158,8 +165,10 @@ namespace SlidingPuzzle {
         callback();
         this.mouseIsPressed = false;
       };
-      this.boardDiv.addEventListener("mouseup", (e) => handler(e));
-      this.boardDiv.addEventListener("touchend", (e) => handler(e));
+      // Event is placed on the <body> element to handle the case where the
+      // player releases the mouse outside de puzzle board.
+      document.body.addEventListener("mouseup", (e) => handler(e));
+      document.body.addEventListener("touchend", (e) => handler(e));
     }
 
     render(block: Block = null) {
