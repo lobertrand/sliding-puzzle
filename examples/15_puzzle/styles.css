@@ -1,0 +1,19 @@
+#container {
+  user-select: none;
+  background-color: lightgray;
+  padding: 4px;
+}
+
+#container .block {
+  display: grid;
+  background-color: white;
+  transform: scale(0.95);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#container .number {
+  margin: auto;
+  font-size: 50px;
+  font-family: monospace, sans-serif;
+}

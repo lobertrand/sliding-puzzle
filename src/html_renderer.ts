@@ -10,15 +10,15 @@ interface Proportions {
 
 interface HTMLRendererParameters {
   board: Board;
-  parentElement: HTMLElement;
-  proportions: Proportions;
-  backgroundImage: HTMLImageElement;
+  container?: HTMLElement;
+  proportions?: Proportions;
+  backgroundImage?: HTMLImageElement;
 }
 
 export class HTMLRenderer {
   board: Board;
   proportions: Proportions;
-  parentElement: HTMLElement;
+  container: HTMLElement;
   backgroundDiv: HTMLDivElement;
   boardDiv: HTMLDivElement;
   blockDivsMap: Map<Block, HTMLDivElement> = new Map();
@@ -26,33 +26,38 @@ export class HTMLRenderer {
 
   constructor({
     board,
-    parentElement,
-    proportions,
+    container = document.body,
+    proportions = { x: 0, y: 0, width: 1, height: 1 },
     backgroundImage,
   }: HTMLRendererParameters) {
     this.board = board;
     this.proportions = proportions;
-    this.parentElement = parentElement;
+    this.container = container;
 
     // Background
     this.backgroundDiv =
-      this.parentElement.querySelector("div.background") ||
+      this.container.querySelector("div.background") ||
       document.createElement("div");
-    this.parentElement.appendChild(this.backgroundDiv);
-    this.parentElement.style.display = "grid";
+    this.container.appendChild(this.backgroundDiv);
+    this.container.style.display = "grid";
 
-    const resize = () => {
-      const bounds = parentElement.getBoundingClientRect();
-      const bgRatio = backgroundImage.width / backgroundImage.height;
-      const boundsRatio = bounds.width / bounds.height;
-      const w = boundsRatio > bgRatio ? bgRatio / boundsRatio : 1;
-      const h = boundsRatio > bgRatio ? 1 : boundsRatio / bgRatio;
-      this.backgroundDiv.style.width = w * 100 + "%";
-      this.backgroundDiv.style.height = h * 100 + "%";
+    const resizeBackground = () => {
+      if (backgroundImage) {
+        const bounds = container.getBoundingClientRect();
+        const boundsRatio = bounds.width / bounds.height;
+        const bgRatio = backgroundImage.width / backgroundImage.height;
+        const w = boundsRatio > bgRatio ? bgRatio / boundsRatio : 1;
+        const h = boundsRatio > bgRatio ? 1 : boundsRatio / bgRatio;
+        this.backgroundDiv.style.width = w * 100 + "%";
+        this.backgroundDiv.style.height = h * 100 + "%";
+      } else {
+        this.backgroundDiv.style.width = "100%";
+        this.backgroundDiv.style.height = "100%";
+      }
     };
-    resize();
-    const observer = new ResizeObserver(resize);
-    observer.observe(this.parentElement);
+    resizeBackground();
+    const observer = new ResizeObserver(resizeBackground);
+    observer.observe(this.container);
 
     this.backgroundDiv.style.position = "relative";
     this.backgroundDiv.style.margin = "auto";
@@ -96,6 +101,9 @@ export class HTMLRenderer {
       }
       if (block.imagePath) {
         this._applyBackground(blockDiv, block.imagePath);
+      }
+      if (block.content) {
+        blockDiv.innerHTML = block.content;
       }
 
       this.boardDiv.appendChild(blockDiv);

@@ -10,7 +10,7 @@ const CALLBACK_NAMES = [
 ] as const;
 
 type CallbackName = typeof CALLBACK_NAMES[number];
-type BlockConsumer = (block: Block) => void;
+type BlockConsumer = (b: Block) => void;
 interface Point {
   x: number;
   y: number;
@@ -88,11 +88,23 @@ export class Board {
     this.blocks.push(block);
   }
 
-  findBlocksByTag(tag: string) {
-    return this.blocks.filter((b) => b.tag === tag);
+  findBlock(nameOrPredicate: string | ((b: Block) => boolean)): Block {
+    if (typeof nameOrPredicate === "string") {
+      const name = nameOrPredicate;
+      for (let block of this.blocks) {
+        if (block.name === name) return block;
+      }
+      return null;
+    } else {
+      const predicate = nameOrPredicate;
+      for (let block of this.blocks) {
+        if (predicate(block)) return block;
+      }
+      return null;
+    }
   }
 
-  on(event: CallbackName, callback: (block: Block) => void) {
+  on(event: CallbackName, callback: (b: Block) => void) {
     // Runtime check
     if (!CALLBACK_NAMES.includes(event)) {
       console.error(

@@ -12,7 +12,8 @@ export interface BlockParameters {
   selectable?: boolean;
   color?: string;
   image?: string | HTMLImageElement | P5Canvas;
-  tag?: string;
+  name?: string;
+  content?: any;
 }
 
 export class Block {
@@ -27,7 +28,8 @@ export class Block {
   color: string;
   imageElement: HTMLImageElement;
   imagePath: string;
-  tag: string;
+  name: string;
+  content: any;
 
   constructor({
     shape = [[1]],
@@ -38,7 +40,8 @@ export class Block {
     selectable = true,
     color,
     image,
-    tag,
+    name,
+    content,
   }: BlockParameters = {}) {
     this.shape = shape;
     this.cols = this.shape.reduce((acc, curr) => Math.max(acc, curr.length), 0);
@@ -49,7 +52,8 @@ export class Block {
     this.possibleOverlaps = possibleOverlaps;
     this.selectable = selectable;
     this.color = color;
-    this.tag = tag;
+    this.name = name;
+    this.content = content;
 
     if (image) {
       if (typeof image === "string") {
