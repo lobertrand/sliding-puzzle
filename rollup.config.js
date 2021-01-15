@@ -5,18 +5,18 @@ export default {
   input: "src/main.ts",
   output: [
     {
-      file: pkg.main,
+      file: "dist/sliding-puzzle-umd.js",
       format: "umd",
       name: "SlidingPuzzle",
     },
-    // {
-    //     file: pkg.main,
-    //     format: 'cjs',
-    // },
-    // {
-    //     file: pkg.module,
-    //     format: 'es',
-    // },
+    {
+      file: "dist/sliding-puzzle-cjs.js",
+      format: "cjs",
+    },
+    {
+      file: "dist/sliding-puzzle-esm.js",
+      format: "esm",
+    },
   ],
   external: [
     ...Object.keys(pkg.dependencies || {}),

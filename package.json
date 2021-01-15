@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Base classes and game logic for creating a sliding puzzle. Inspired by the puzzles of 'Professor Layton' and 'Rush Hour'.",
   "main": "dist/sliding-puzzle.js",
-  "types": "dist/sliding-puzzle.d.ts",
+  "types": "dist/*.d.ts",
   "files": [
     "/dist"
   ],
